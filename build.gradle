@@ -10,7 +10,7 @@ group = 'com.example'
 version = '0.0.1-SNAPSHOT'
 sourceCompatibility = '17'
 
-def frontendDir = project(':frontend').projectDir
+def frontendDir = project(':view').projectDir
 
 configurations {
     compileOnly {
