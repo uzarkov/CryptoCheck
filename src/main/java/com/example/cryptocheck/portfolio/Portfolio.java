@@ -35,7 +35,7 @@ public class Portfolio {
     private Cryptocurrency cryptocurrency;
 
     @ManyToOne
-    @JoinColumn(name = "app_user_id");
+    @JoinColumn(name = "app_user_id")
     private AppUser appUser;
 
     public Portfolio(Cryptocurrency cryptocurrency,

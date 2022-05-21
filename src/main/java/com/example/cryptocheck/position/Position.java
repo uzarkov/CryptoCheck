@@ -46,7 +46,7 @@ public class Position {
     private Cryptocurrency cryptocurrency;
 
     @ManyToOne
-    @JoinColumn(name = "app_user_id");
+    @JoinColumn(name = "app_user_id")
     private AppUser appUser;
 
     public Position(BigDecimal entryPrice,
