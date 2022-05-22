@@ -1,7 +1,7 @@
 package com.example.cryptocheck.dev;
 
-import com.example.cryptocheck.user.User;
-import com.example.cryptocheck.user.UserRepository;
+import com.example.cryptocheck.user.AppUser;
+import com.example.cryptocheck.user.AppUserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
@@ -15,7 +15,7 @@ import java.util.Locale;
 @Component
 @RequiredArgsConstructor
 public class DataLoader implements ApplicationRunner {
-    private final UserRepository userRepository;
+    private final AppUserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
 
     @Override
@@ -25,8 +25,8 @@ public class DataLoader implements ApplicationRunner {
         addSampleUser("Tomasz");
     }
 
-    private User addSampleUser(String name) {
-        var user = new User();
+    private AppUser addSampleUser(String name) {
+        var user = new AppUser();
         user.setName(name);
         user.setEmail(name.toLowerCase(Locale.ROOT) + "@test.com");
         user.setPassword(passwordEncoder.encode("password"));

@@ -1,16 +1,16 @@
 package com.example.cryptocheck.auth;
 
-import com.example.cryptocheck.user.User;
-import com.example.cryptocheck.user.UserRepository;
+import com.example.cryptocheck.user.AppUser;
+import com.example.cryptocheck.user.AppUserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
 public class AuthService {
-    private final UserRepository userRepository;
+    private final AppUserRepository userRepository;
 
-    public User getUserByEmail(String email) {
+    public AppUser getUserByEmail(String email) {
         return userRepository.getUserByEmail(email).orElseThrow();
     }
 }

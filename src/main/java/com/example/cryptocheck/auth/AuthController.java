@@ -3,7 +3,7 @@ package com.example.cryptocheck.auth;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.example.cryptocheck.security.JwtTokenFilter;
-import com.example.cryptocheck.user.UserRepository;
+import com.example.cryptocheck.user.AppUserRepository;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -21,11 +21,11 @@ import org.springframework.web.bind.annotation.RestController;
 public class AuthController {
     private final String jwtSigningSecret;
     private final AuthenticationManager authenticationManager;
-    private final UserRepository userRepository;
+    private final AppUserRepository userRepository;
 
     public AuthController(@Value("${jwt.signing-secret}") String jwtSigningSecret,
                           AuthenticationManager authenticationManager,
-                          UserRepository userRepository) {
+                          AppUserRepository userRepository) {
         this.jwtSigningSecret = jwtSigningSecret;
         this.authenticationManager = authenticationManager;
         this.userRepository = userRepository;
