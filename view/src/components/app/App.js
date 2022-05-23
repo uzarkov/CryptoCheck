@@ -1,10 +1,11 @@
-import logo from './logo.svg';
+import logo from '../../logo.svg';
 import './App.css';
-import {doPost} from "./utils/fetch-utils";
+import {doPost} from "../../utils/fetch-utils";
 import {useState} from "react";
-
+import { ContentRouting } from "../../router/ContentRouting";
 
 const SignInView = ({signIn}) => {
+
   const [emailInput, setEmailInput] = useState('');
   const [passwordInput, setPasswordInput] = useState('');
 
@@ -53,7 +54,9 @@ function App() {
           ...user,
           authenticated: true,
           ...userInfo
-        })
+        });
+        //history.push("/dashboard");
+        //history.go(0);
       })
       .catch(error => console.error(error))
   }
@@ -65,8 +68,9 @@ function App() {
   if (user.authenticated) {
     return (
       <div>
-        <h4>{`Hi, ${user.name}`}</h4>
-        <button onClick={logout}>Log out</button>
+        {/*<h4>{`Hi, ${user.name}`}</h4>*/}
+        {/*<button onClick={logout}>Log out</button>*/}
+        <ContentRouting/>
       </div>
     )
   }
