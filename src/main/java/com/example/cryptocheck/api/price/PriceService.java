@@ -49,13 +49,13 @@ public class PriceService {
 
     private void validateSymbol(String symbol) {
         if (!supportedSymbols.contains(symbol)) {
-            throw new IllegalArgumentException();
+            throw PriceServiceException.unsupportedSymbolException(symbol);
         }
     }
 
     private void validateIntervalId(String intervalId) {
         if (!supportedIntervals.contains(intervalId)) {
-            throw new IllegalArgumentException();
+            throw PriceServiceException.unsupportedIntervalException(intervalId);
         }
     }
 }
