@@ -11,8 +11,8 @@ const checkForError = async (response) => {
   return response
 }
 
-export const doGet = async (endpoint) => {
-  const headers = await addAuthorizationHeader({
+export const doGet = (endpoint) => {
+  const headers = addAuthorizationHeader({
     'Accept': 'application/json',
   })
 
@@ -23,14 +23,14 @@ export const doGet = async (endpoint) => {
     .then(response => checkForError(response))
 }
 
-export const doPost = async (endpoint, body = {}, authorize = true) => {
+export const doPost = (endpoint, body = {}, authorize = true) => {
   let headers = {
     'Content-Type': 'application/json',
     'Accept': 'application/json',
   }
 
   if (authorize) {
-    headers = await addAuthorizationHeader(headers)
+    headers = addAuthorizationHeader(headers)
   }
 
   return fetch(URL_PREFIX + endpoint, {
@@ -41,8 +41,8 @@ export const doPost = async (endpoint, body = {}, authorize = true) => {
     .then(response => checkForError(response))
 }
 
-export const doPatch = async (endpoint, body = {}) => {
-  const headers = await addAuthorizationHeader({
+export const doPatch = (endpoint, body = {}) => {
+  const headers = addAuthorizationHeader({
     'Content-Type': 'application/json',
     'Accept': 'application/json',
   })
@@ -55,8 +55,8 @@ export const doPatch = async (endpoint, body = {}) => {
     .then(response => checkForError(response))
 }
 
-export const doDelete = async (endpoint) => {
-  const headers = await addAuthorizationHeader({
+export const doDelete = (endpoint) => {
+  const headers = addAuthorizationHeader({
     'Accept': 'application/json',
   })
 
@@ -67,13 +67,13 @@ export const doDelete = async (endpoint) => {
     .then(response => checkForError(response))
 }
 
-const addAuthorizationHeader = async (headers) => {
+const addAuthorizationHeader = (headers) => {
   const jwt = localStorage.getItem("ACCESS_TOKEN")
 
   if (jwt) {
     return {
       ...headers,
-      ['Authorization']: `Bearer ${jwt}`,
+      Authorization: `Bearer ${jwt}`,
     }
   }
 

@@ -63,6 +63,7 @@ function App() {
 
   const logout = () => {
     setUser({authenticated: false})
+    localStorage.removeItem("ACCESS_TOKEN")
   }
 
   if (user.authenticated) {

@@ -9,8 +9,6 @@ import org.springframework.context.annotation.Profile;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
-import java.util.Locale;
-
 @Profile("developer")
 @Component
 @RequiredArgsConstructor
@@ -19,7 +17,7 @@ public class DataLoader implements ApplicationRunner {
     private final PasswordEncoder passwordEncoder;
 
     @Override
-    public void run(ApplicationArguments args) throws Exception {
+    public void run(ApplicationArguments args) {
         addSampleUser("Jan");
         addSampleUser("Andrzej");
         addSampleUser("Tomasz");
@@ -28,7 +26,7 @@ public class DataLoader implements ApplicationRunner {
     private AppUser addSampleUser(String name) {
         var user = new AppUser();
         user.setName(name);
-        user.setEmail(name.toLowerCase(Locale.ROOT) + "@test.com");
+        user.setEmail(name.toLowerCase() + "@test.com");
         user.setPassword(passwordEncoder.encode("password"));
         return userRepository.save(user);
     }

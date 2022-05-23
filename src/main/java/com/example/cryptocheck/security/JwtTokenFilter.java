@@ -57,7 +57,7 @@ public class JwtTokenFilter extends OncePerRequestFilter {
     private void setAuthentication(DecodedJWT jwt, HttpServletRequest request) {
         var emailClaim = jwt.getClaim(EMAIL_CLAIM);
         if (emailClaim != null) {
-            var email = emailClaim.toString();
+            var email = emailClaim.asString();
             var userDetails = userDetailsService.loadUserByUsername(email);
             var authentication = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
             authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));

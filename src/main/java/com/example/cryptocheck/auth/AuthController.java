@@ -45,6 +45,7 @@ public class AuthController {
                     .sign(Algorithm.HMAC256(jwtSigningSecret));
 
             return ResponseEntity.ok()
+                    .header(HttpHeaders.ACCESS_CONTROL_EXPOSE_HEADERS, "Authorization")
                     .header(HttpHeaders.AUTHORIZATION, jwt)
                     .body(AuthenticatedUserMetadata.from(user));
         } catch (BadCredentialsException ex) {
