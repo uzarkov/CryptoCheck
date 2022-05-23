@@ -1,4 +1,4 @@
-package com.example.cryptocheck.api.price;
+package com.example.cryptocheck.price;
 
 import com.example.cryptocheck.exception.RestException;
 import org.springframework.http.HttpStatus;

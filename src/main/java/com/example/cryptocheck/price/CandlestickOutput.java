@@ -1,4 +1,4 @@
-package com.example.cryptocheck.api.price;
+package com.example.cryptocheck.price;
 
 import com.binance.api.client.domain.market.Candlestick;
 

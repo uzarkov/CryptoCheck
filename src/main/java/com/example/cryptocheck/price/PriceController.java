@@ -1,4 +1,4 @@
-package com.example.cryptocheck.api.price;
+package com.example.cryptocheck.price;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
