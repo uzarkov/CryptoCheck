@@ -1,12 +1,9 @@
 package com.example.cryptocheck.auth;
 
-import com.auth0.jwt.JWT;
-import com.auth0.jwt.algorithms.Algorithm;
-import com.example.cryptocheck.security.JwtTokenFilter;
+import com.example.cryptocheck.auth.oauth.OAuthProvider;
 import com.example.cryptocheck.user.AppUserRepository;
-import org.springframework.beans.factory.annotation.Value;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -18,38 +15,31 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/api/auth")
+@RequiredArgsConstructor
 public class AuthController {
-    private final String jwtSigningSecret;
     private final AuthenticationManager authenticationManager;
     private final AppUserRepository userRepository;
-
-    public AuthController(@Value("${jwt.signing-secret}") String jwtSigningSecret,
-                          AuthenticationManager authenticationManager,
-                          AppUserRepository userRepository) {
-        this.jwtSigningSecret = jwtSigningSecret;
-        this.authenticationManager = authenticationManager;
-        this.userRepository = userRepository;
-    }
+    private final JwtUtils jwtUtils;
 
     @PostMapping("/login")
     public ResponseEntity<AuthenticatedUserMetadata> login(@RequestBody LoginRequestBody loginRequestBody) {
         try {
             var email = loginRequestBody.email();
+            var user = userRepository.getUserByEmail(email).orElseThrow(AuthException::invalidCredentials);
+            if (user.getAuthProvider() != OAuthProvider.NONE) {
+                throw AuthException.invalidCredentials();
+            }
+
             var password = loginRequestBody.password();
             var authToken = new UsernamePasswordAuthenticationToken(email, password);
             authenticationManager.authenticate(authToken);
 
-            var user = userRepository.getUserByEmail(email).orElseThrow();
-            var jwt = JWT.create()
-                    .withClaim(JwtTokenFilter.EMAIL_CLAIM, user.getEmail())
-                    .sign(Algorithm.HMAC256(jwtSigningSecret));
-
             return ResponseEntity.ok()
                     .header(HttpHeaders.ACCESS_CONTROL_EXPOSE_HEADERS, "Authorization")
-                    .header(HttpHeaders.AUTHORIZATION, jwt)
+                    .header(HttpHeaders.AUTHORIZATION, jwtUtils.createJwtFor(user.getEmail()))
                     .body(AuthenticatedUserMetadata.from(user));
         } catch (BadCredentialsException ex) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+            throw AuthException.invalidCredentials();
         }
     }
 }
