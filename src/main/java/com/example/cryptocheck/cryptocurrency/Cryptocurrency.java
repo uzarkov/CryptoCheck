@@ -18,18 +18,7 @@ import java.util.List;
 public class Cryptocurrency {
 
     @Id
-    @SequenceGenerator(
-            name="currency_seq",
-            sequenceName = "currency_seq",
-            allocationSize = 1
-    )
-    @GeneratedValue(
-            strategy = GenerationType.SEQUENCE,
-            generator = "currency_seq"
-    )
-    private Long id;
-
-    @Column(nullable = false, length = 30, unique = true)
+    @Column(nullable = false, length = 30)
     private String name;
 
     @Column(nullable = false, length = 6, unique = true)
