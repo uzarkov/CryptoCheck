@@ -4,9 +4,11 @@ import com.example.cryptocheck.auth.AuthException;
 import com.example.cryptocheck.user.AppUser;
 import com.example.cryptocheck.user.AppUserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;
+import org.springframework.security.oauth2.client.userinfo.OAuth2UserService;
 import org.springframework.security.oauth2.core.OAuth2AuthenticationException;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Service;
@@ -15,9 +17,16 @@ import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
-public class CustomOAuth2UserService extends DefaultOAuth2UserService {
+public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequest, OAuth2User> {
     private final AppUserRepository appUserRepository;
     private final PasswordEncoder passwordEncoder;
+    private final DefaultOAuth2UserService defaultOAuth2UserService;
+
+    @Autowired
+    public CustomOAuth2UserService(AppUserRepository appUserRepository,
+                                   PasswordEncoder passwordEncoder) {
+        this(appUserRepository, passwordEncoder, new DefaultOAuth2UserService());
+    }
 
     @Override
     public OAuth2User loadUser(OAuth2UserRequest userRequest) throws OAuth2AuthenticationException {
@@ -27,7 +36,7 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
         }
 
         var authProvider = OAuthProvider.forRegistrationId(registrationId);
-        var oauth2User = super.loadUser(userRequest);
+        var oauth2User = defaultOAuth2UserService.loadUser(userRequest);
         var name = oauth2User.<String>getAttribute("name");
         var email = oauth2User.<String>getAttribute("email");
 
