@@ -66,7 +66,7 @@ class PriceServiceSpec extends Specification {
         ex.getMessage() == PriceServiceException.unsupportedIntervalException("???").getMessage()
     }
 
-    def "getCurrentPriceOf() SHOULD return current price for the given symbol"() {
+    def "getCurrentPriceOf() WHEN given one symbol SHOULD return current price"() {
         given:
         def supportedSymbols = ["BTCUSDT"] as Set<String>
         def supportedIntervals = [] as Set<String>
@@ -76,10 +76,11 @@ class PriceServiceSpec extends Specification {
         1 * binanceClientMock.getPrice("BTCUSDT") >> Mock(TickerPrice) { getPrice() >> "29238.44000000" }
 
         when:
-        def result = priceService.getCurrentPriceOf("BTCUSDT")
+        def result = priceService.getCurrentPricesOf("BTCUSDT")
 
         then:
-        result == "29238.44000000"
+        result.size() == 1
+        result["BTCUSDT"] == "29238.44000000"
     }
 
     def "getCurrentPriceOf() WHEN given unsupported symbol SHOULD throw an exception"() {
@@ -89,10 +90,59 @@ class PriceServiceSpec extends Specification {
         def priceService = new PriceService(binanceClientMock, supportedSymbols, supportedIntervals)
 
         when:
-        priceService.getCurrentPriceOf("???")
+        priceService.getCurrentPricesOf("???")
 
         then:
         def ex = thrown(PriceServiceException)
         ex.getMessage() == PriceServiceException.unsupportedSymbolException("???").getMessage()
+    }
+
+    def "getCurrentPriceOf() WHEN given multiple symbols SHOULD return their prices"() {
+        given:
+        def supportedSymbols = ["BTCUSDT", "ETHUSDT"] as Set<String>
+        def supportedIntervals = [] as Set<String>
+        def priceService = new PriceService(binanceClientMock, supportedSymbols, supportedIntervals)
+
+        and:
+        1 * binanceClientMock.getAllPrices() >> [
+                Mock(TickerPrice) { getSymbol() >> "BTCUSDT"; getPrice() >> "29238.44000000" },
+                Mock(TickerPrice) { getSymbol() >> "ETHUSDT"; getPrice() >> "1748.93000000" }
+        ]
+
+        when:
+        def result = priceService.getCurrentPricesOf("BTCUSDT,ETHUSDT")
+
+        then:
+        result.size() == 2
+        result["BTCUSDT"] == "29238.44000000"
+        result["ETHUSDT"] == "1748.93000000"
+    }
+
+    def "getCurrentPriceOf() WHEN given atleast one unsupported symbol SHOULD throw an exception"() {
+        given:
+        def supportedSymbols = ["BTCUSDT"] as Set<String>
+        def supportedIntervals = [] as Set<String>
+        def priceService = new PriceService(binanceClientMock, supportedSymbols, supportedIntervals)
+
+        when:
+        priceService.getCurrentPricesOf("BTCUSDT,???")
+
+        then:
+        def ex = thrown(PriceServiceException)
+        ex.getMessage() == PriceServiceException.unsupportedSymbolException("???").getMessage()
+    }
+
+    def "getCurrentPriceOf() WHEN given empty symbol SHOULD throw an exception"() {
+        given:
+        def supportedSymbols = ["BTCUSDT"] as Set<String>
+        def supportedIntervals = [] as Set<String>
+        def priceService = new PriceService(binanceClientMock, supportedSymbols, supportedIntervals)
+
+        when:
+        priceService.getCurrentPricesOf("")
+
+        then:
+        def ex = thrown(PriceServiceException)
+        ex.getMessage() == PriceServiceException.unsupportedSymbolException("").getMessage()
     }
 }

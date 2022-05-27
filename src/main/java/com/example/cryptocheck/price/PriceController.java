@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 @RestController
@@ -25,9 +26,9 @@ public class PriceController {
         return priceService.getSupportedIntervals();
     }
 
-    @GetMapping(path = "/{symbol}")
-    public String getCurrentPrice(@PathVariable(name = "symbol") String symbol) {
-        return priceService.getCurrentPriceOf(symbol);
+    @GetMapping(path = "/{symbols}")
+    public Map<String, String> getCurrentPrice(@PathVariable(name = "symbols") String symbols) {
+        return priceService.getCurrentPricesOf(symbols);
     }
 
     @GetMapping(path = "/{symbol}/{intervalId}")

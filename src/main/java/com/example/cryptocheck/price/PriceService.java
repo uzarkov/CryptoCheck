@@ -8,9 +8,8 @@ import lombok.Getter;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
-import java.util.Arrays;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 public class PriceService {
@@ -33,7 +32,23 @@ public class PriceService {
         return binanceClient.getCandlestickBars(symbol, candlestickIntervalForId(intervalId));
     }
 
-    public String getCurrentPriceOf(String symbol) {
+    public Map<String, String> getCurrentPricesOf(String symbols) {
+        var symbolsArray = symbols.split(",");
+
+        if (symbolsArray.length == 1) {
+            var symbol = symbolsArray[0];
+            return Map.of(symbol, getCurrentPriceOf(symbol));
+        }
+
+        var symbolsSet = Arrays.stream(symbolsArray).collect(Collectors.toSet());
+        symbolsSet.forEach(this::validateSymbol);
+
+        return binanceClient.getAllPrices().stream()
+                .filter(tickerPrice -> symbolsSet.contains(tickerPrice.getSymbol()))
+                .collect(Collectors.toMap(TickerPrice::getSymbol, TickerPrice::getPrice));
+    }
+
+    private String getCurrentPriceOf(String symbol) {
         validateSymbol(symbol);
 
         TickerPrice tickerPrice = binanceClient.getPrice(symbol);
