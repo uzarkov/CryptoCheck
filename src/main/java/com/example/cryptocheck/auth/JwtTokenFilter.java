@@ -1,10 +1,7 @@
-package com.example.cryptocheck.security;
+package com.example.cryptocheck.auth;
 
-import com.auth0.jwt.JWT;
-import com.auth0.jwt.algorithms.Algorithm;
-import com.auth0.jwt.exceptions.JWTVerificationException;
 import com.auth0.jwt.interfaces.DecodedJWT;
-import org.springframework.beans.factory.annotation.Value;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -19,17 +16,10 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 @Component
+@RequiredArgsConstructor
 public class JwtTokenFilter extends OncePerRequestFilter {
-    public static final String EMAIL_CLAIM = "email";
-
-    private final String jwtSigningSecret;
     private final UserDetailsServiceImpl userDetailsService;
-
-    public JwtTokenFilter(@Value("${jwt.signing-secret}") String jwtSigningSecret,
-                          UserDetailsServiceImpl userDetailsService) {
-        this.jwtSigningSecret = jwtSigningSecret;
-        this.userDetailsService = userDetailsService;
-    }
+    private final JwtUtils jwtUtils;
 
     @Override
     protected void doFilterInternal(HttpServletRequest request,
@@ -42,20 +32,13 @@ public class JwtTokenFilter extends OncePerRequestFilter {
         }
 
         var token = authHeader.split(" ")[1].trim();
-
-        try {
-            var verifier = JWT.require(Algorithm.HMAC256(jwtSigningSecret)).build();
-            var jwt = verifier.verify(token);
-            setAuthentication(jwt, request);
-        } catch (JWTVerificationException exception) {
-            // TODO: Log that token verification failed
-        }
+        jwtUtils.decodeJwt(token).ifPresent(decodedJwt -> setAuthentication(decodedJwt, request));
 
         filterChain.doFilter(request, response);
     }
 
     private void setAuthentication(DecodedJWT jwt, HttpServletRequest request) {
-        var emailClaim = jwt.getClaim(EMAIL_CLAIM);
+        var emailClaim = jwt.getClaim(JwtUtils.EMAIL_CLAIM);
         if (emailClaim != null) {
             var email = emailClaim.asString();
             var userDetails = userDetailsService.loadUserByUsername(email);

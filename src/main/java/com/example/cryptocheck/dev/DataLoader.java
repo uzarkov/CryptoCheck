@@ -1,5 +1,6 @@
 package com.example.cryptocheck.dev;
 
+import com.example.cryptocheck.auth.oauth.OAuthProvider;
 import com.example.cryptocheck.user.AppUser;
 import com.example.cryptocheck.user.AppUserRepository;
 import lombok.RequiredArgsConstructor;
@@ -28,6 +29,7 @@ public class DataLoader implements ApplicationRunner {
         user.setName(name);
         user.setEmail(name.toLowerCase() + "@test.com");
         user.setPassword(passwordEncoder.encode("password"));
+        user.setAuthProvider(OAuthProvider.NONE);
         return userRepository.save(user);
     }
 }

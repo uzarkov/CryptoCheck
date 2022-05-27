@@ -1,5 +1,8 @@
 package com.example.cryptocheck.security;
 
+import com.example.cryptocheck.auth.JwtTokenFilter;
+import com.example.cryptocheck.auth.oauth.CustomOAuth2UserService;
+import com.example.cryptocheck.auth.oauth.OAuth2AuthenticationSuccessHandler;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.core.env.Environment;
@@ -24,6 +27,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     private final JwtTokenFilter jwtTokenFilter;
     private final UserDetailsService userDetailsService;
     private final Environment environment;
+    private final CustomOAuth2UserService customOAuth2UserService;
+    private final OAuth2AuthenticationSuccessHandler oAuth2AuthenticationSuccessHandler;
 
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
@@ -34,7 +39,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         var activeProfiles = Arrays.asList(environment.getActiveProfiles());
 
-        http.csrf().disable();
+        http.cors().and().csrf().disable();
 
         configureAuthentication(http, activeProfiles);
     }
@@ -61,8 +66,14 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         } else {
             http
                     .authorizeRequests()
-                    .antMatchers("/", "/static/**", "/api/auth/**").permitAll()
-                    .anyRequest().authenticated();
+                    .antMatchers("/", "/static/**", "/api/auth/**", "/oauth2/**").permitAll()
+                    .anyRequest().authenticated()
+                    .and()
+                    .oauth2Login()
+                    .userInfoEndpoint()
+                    .userService(customOAuth2UserService)
+                    .and()
+                    .successHandler(oAuth2AuthenticationSuccessHandler);
         }
     }
 

@@ -1,6 +1,5 @@
-package com.example.cryptocheck.security;
+package com.example.cryptocheck.auth;
 
-import com.example.cryptocheck.auth.AuthService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;

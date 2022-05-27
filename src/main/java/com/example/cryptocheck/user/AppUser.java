@@ -1,5 +1,6 @@
 package com.example.cryptocheck.user;
 
+import com.example.cryptocheck.auth.oauth.OAuthProvider;
 import com.example.cryptocheck.portfolio.Portfolio;
 import com.example.cryptocheck.position.Position;
 import com.example.cryptocheck.preference.Preference;
@@ -33,10 +34,15 @@ public class AppUser {
     @Column(nullable = false)
     private String name;
 
-    @Column(nullable = false)
+    @Column(nullable = false, unique = true)
     private String email;
 
+    @Column(nullable = false)
     private String password;
+
+    @Column(nullable = false)
+    @Enumerated(EnumType.STRING)
+    private OAuthProvider authProvider;
 
     public UserDetails asUserDetails() {
         return new User(email, password, Collections.emptyList());
