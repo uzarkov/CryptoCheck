@@ -17,10 +17,8 @@ public class PortfolioController {
     private final PortfolioService portfolioService;
 
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<PortfolioOutput> getPortfolio(/*Principal principal*/) {
-        //var userEmail = principal.getName();
-        var userEmail = "jan@test.com";
-
+    public ResponseEntity<PortfolioOutput> getPortfolio(Principal principal) {
+        var userEmail = principal.getName();
         var portfolio = portfolioService.getPortfolio(userEmail);
 
         return ResponseEntity.ok().body(portfolio);
@@ -29,10 +27,8 @@ public class PortfolioController {
     @PostMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<PortfolioOutput> addPortfolioRecord(@RequestBody PortfolioRecordInput portfolioRecord,
                                                               Principal principal) {
-       // var userEmail = principal.getName();
-        var userEmail = "jan@test.com";
+        var userEmail = principal.getName();
         var updatedPortfolio = portfolioService.addPortfolioRecord(portfolioRecord, userEmail);
-        //var updatedPortfolio = portfolioService.getPortfolio(userEmail);
         return ResponseEntity.ok().body(updatedPortfolio);
     }
 
