@@ -5,6 +5,7 @@ import com.example.cryptocheck.user.AppUser;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.ToString;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
@@ -13,7 +14,8 @@ import java.math.BigDecimal;
 @Setter
 @NoArgsConstructor
 @Entity
-public class Portfolio {
+@ToString
+public class PortfolioRecord {
 
     @Id
     @SequenceGenerator(
@@ -38,9 +40,9 @@ public class Portfolio {
     @JoinColumn(name = "app_user_id")
     private AppUser appUser;
 
-    public Portfolio(Cryptocurrency cryptocurrency,
-                     BigDecimal quantity,
-                     AppUser appUser) {
+    public PortfolioRecord(Cryptocurrency cryptocurrency,
+                           BigDecimal quantity,
+                           AppUser appUser) {
         this.cryptocurrency = cryptocurrency;
         this.appUser = appUser;
         this.quantity = quantity;

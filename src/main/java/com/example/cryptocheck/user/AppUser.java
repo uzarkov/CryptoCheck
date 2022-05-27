@@ -1,7 +1,7 @@
 package com.example.cryptocheck.user;
 
 import com.example.cryptocheck.auth.oauth.OAuthProvider;
-import com.example.cryptocheck.portfolio.Portfolio;
+import com.example.cryptocheck.portfolio.PortfolioRecord;
 import com.example.cryptocheck.position.Position;
 import com.example.cryptocheck.preference.Preference;
 import lombok.Getter;
@@ -64,5 +64,5 @@ public class AppUser {
             orphanRemoval = true,
             cascade = CascadeType.REMOVE
     )
-    private List<Portfolio> portfolioRecords;
+    private List<PortfolioRecord> portfolioRecords;
 }

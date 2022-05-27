@@ -5,7 +5,7 @@ import org.springframework.http.HttpStatus;
 
 public class NoSuchCryptocurrencyException extends RestException {
 
-    private static final String ERROR_MESSAGE = "There is no such position";
+    private static final String ERROR_MESSAGE = "There is no such cryptocurrency";
 
     private NoSuchCryptocurrencyException(String errorMessage) {
         super(errorMessage, HttpStatus.NOT_FOUND);
