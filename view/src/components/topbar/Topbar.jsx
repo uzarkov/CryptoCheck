@@ -13,6 +13,7 @@ import {MobileAppBar} from "./MobileAppBar";
 import {DesktopAppBar} from "./DesktopAppBar";
 
 export const Topbar = ({isOpen, setIsOpen, logout}) => {
+  const isMobile = window.matchMedia(`(max-width: 720px)`).matches;
   const history = useHistory()
   const location = useLocation()
 
@@ -29,7 +30,6 @@ export const Topbar = ({isOpen, setIsOpen, logout}) => {
     return currentPage?.name || "Dashboard"
   }
 
-  const isMobile = window.matchMedia(`(max-width: 720px)`).matches;
   const AppBar = isMobile ? MobileAppBar : DesktopAppBar;
 
   return (

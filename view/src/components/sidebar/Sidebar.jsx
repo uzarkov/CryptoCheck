@@ -16,6 +16,7 @@ import {DesktopDrawer} from "./DesktopDrawer";
 import {MobileDrawer} from "./MobileDrawer";
 
 export const Sidebar = ({isOpen, setIsOpen}) => {
+  const isMobile = window.matchMedia(`(max-width: 720px)`).matches;
   const history = useHistory()
 
   const mainLinks = [
@@ -45,7 +46,6 @@ export const Sidebar = ({isOpen, setIsOpen}) => {
     ))
   }
 
-  const isMobile = window.matchMedia(`(max-width: 720px)`).matches;
   const Drawer = isMobile ? MobileDrawer : DesktopDrawer
 
   return (
