@@ -1,6 +1,6 @@
 package com.example.cryptocheck.cryptocurrency;
 
-import com.example.cryptocheck.portfolio.Portfolio;
+import com.example.cryptocheck.portfolio.PortfolioRecord;
 import com.example.cryptocheck.position.Position;
 import com.example.cryptocheck.preference.Preference;
 import lombok.Getter;
@@ -28,7 +28,7 @@ public class Cryptocurrency {
     private List<Preference> preferences;
 
     @OneToMany(mappedBy = "cryptocurrency")
-    private List<Portfolio> portfolios;
+    private List<PortfolioRecord> portfolioRecords;
 
     @OneToMany(mappedBy = "cryptocurrency")
     private List<Position> positions;
@@ -38,7 +38,7 @@ public class Cryptocurrency {
         this.name = name;
         this.symbol = symbol;
         this.preferences = new ArrayList<>();
-        this.portfolios = new ArrayList<>();
+        this.portfolioRecords = new ArrayList<>();
         this.positions = new ArrayList<>();
     }
 }
