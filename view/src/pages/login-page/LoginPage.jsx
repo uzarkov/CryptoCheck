@@ -16,7 +16,7 @@ export const LoginPage = ({user, setUser}) => {
         })
         .catch(error => console.error(error))
     }
-  }, [])
+  }, [user, setUser])
 
   const signIn = (email, password) => {
     const body = {
