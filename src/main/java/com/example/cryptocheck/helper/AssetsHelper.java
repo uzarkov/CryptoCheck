@@ -22,4 +22,11 @@ public final class AssetsHelper {
                                                BigDecimal price) {
         return quantity.multiply(price);
     }
+
+    public static BigDecimal computePercentageChange(BigDecimal start,
+                                                     BigDecimal finish) {
+        return (finish.subtract(start))
+                .multiply(ONE_HUNDRED)
+                .divide(start, 2, RoundingMode.HALF_EVEN);
+    }
 }

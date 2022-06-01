@@ -48,7 +48,7 @@ public class PriceService {
                 .collect(Collectors.toMap(TickerPrice::getSymbol, TickerPrice::getPrice));
     }
 
-    private String getCurrentPriceOf(String symbol) {
+    public String getCurrentPriceOf(String symbol) {
         validateSymbol(symbol);
 
         TickerPrice tickerPrice = binanceClient.getPrice(symbol);

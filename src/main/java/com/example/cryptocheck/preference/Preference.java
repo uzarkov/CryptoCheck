@@ -15,28 +15,22 @@ import javax.persistence.*;
 @Entity
 public class Preference {
 
-    @Id
-    @SequenceGenerator(
-            name="preference_seq",
-            sequenceName = "preference_seq",
-            allocationSize = 1
-    )
-    @GeneratedValue(
-            strategy = GenerationType.SEQUENCE,
-            generator = "preference_seq"
-    )
-    private Long id;
+    @EmbeddedId
+    private PreferenceId id;
 
     @ManyToOne
-    @JoinColumn(name = "cryptocurrency_id")
-    private Cryptocurrency cryptocurrency;
-
-    @ManyToOne
+    @MapsId("appUserId")
     @JoinColumn(name = "app_user_id")
     private AppUser appUser;
 
+    @ManyToOne
+    @MapsId("cryptocurrencyId")
+    @JoinColumn(name = "cryptocurrency_id")
+    private Cryptocurrency cryptocurrency;
+
     public Preference(Cryptocurrency cryptocurrency,
                       AppUser appUser) {
+        this.id = PreferenceId.from(appUser.getId(), cryptocurrency.getName());
         this.cryptocurrency = cryptocurrency;
         this.appUser = appUser;
     }

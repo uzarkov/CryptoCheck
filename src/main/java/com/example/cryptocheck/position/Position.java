@@ -41,11 +41,11 @@ public class Position {
 
     private LocalDate closureTime;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "cryptocurrency_id")
     private Cryptocurrency cryptocurrency;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "app_user_id")
     private AppUser appUser;
 
