@@ -1,6 +1,21 @@
 import {doGet, doPost, URL_PREFIX} from "../../utils/fetch-utils";
-import {BasicLoginForm} from "../../components/login/BasicLoginForm";
+import {LoginForm} from "../../components/login/LoginForm";
 import {useEffect} from "react";
+import Box from '@mui/material/Box';
+import { Container } from '@mui/material';
+import CssBaseline from "@material-ui/core/CssBaseline";
+import { MuiThemeProvider, createMuiTheme } from "@material-ui/core/styles";
+import { ThemeProvider, createTheme } from '@mui/material/styles';
+import Button from '@mui/material/Button';
+import GitHubIcon from '@mui/icons-material/GitHub';
+
+const darkTheme = createMuiTheme({
+  palette: {
+    background: {
+        default: "#192752"
+    }
+  }
+});
 
 export const LoginPage = ({user, setUser}) => {
   useEffect(() => {
@@ -41,11 +56,13 @@ export const LoginPage = ({user, setUser}) => {
   }
 
   return (
-    <div>
-      <div>
-        <a href={`${URL_PREFIX}/oauth2/authorization/github`}>Login with GitHub</a>
-      </div>
-      <BasicLoginForm onSignIn={(email, password) => signIn(email, password)}/>
-    </div>
+  <MuiThemeProvider theme={darkTheme}>
+    <CssBaseline />
+      <Container>
+        <Box sx={{ display: 'flex', justifyContent: 'center'}}>
+          <LoginForm onSignIn={(email, password) => signIn(email, password)}/>
+        </Box>
+      </Container>
+  </MuiThemeProvider>
   )
 }

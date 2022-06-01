@@ -2,8 +2,8 @@ package com.example.cryptocheck.dev;
 
 import com.example.cryptocheck.cryptocurrency.Cryptocurrency;
 import com.example.cryptocheck.cryptocurrency.CryptocurrencyRepository;
-import com.example.cryptocheck.preference.Preference;
-import com.example.cryptocheck.preference.PreferenceRepository;
+//import com.example.cryptocheck.preference.Preference;
+//import com.example.cryptocheck.preference.PreferenceRepository;
 import com.example.cryptocheck.auth.oauth.OAuthProvider;
 import com.example.cryptocheck.user.AppUser;
 import com.example.cryptocheck.user.AppUserRepository;

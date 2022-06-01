@@ -36,3 +36,18 @@
     transform: rotate(360deg);
   }
 }
+
+.textBox-login {
+    background-color: #9AA5C5;
+}
+
+input:-webkit-autofill,
+textarea:-webkit-autofill,
+select:-webkit-autofill {
+  -webkit-box-shadow: 0 0 0 1000px #9AA5C5 inset !important;
+  -webkit-text-fill-color: black !important;
+}
+
+.menu-topBar-item {
+    color: #9AA5C5;
+}
