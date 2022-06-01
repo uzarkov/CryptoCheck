@@ -1,7 +1,5 @@
 package com.example.cryptocheck.portfolio.dto;
 
-import com.example.cryptocheck.cryptocurrency.Cryptocurrency;
-
 public record AssetInfo(String cryptocurrencyName,
                         String cryptocurrencySymbol,
                         double quantity,

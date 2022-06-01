@@ -147,6 +147,10 @@ public class PortfolioService {
                 .map(asset -> asset.cryptocurrency().getSymbol().concat(inPairWith))
                 .collect(Collectors.joining(","));
 
+        if (requiredCryptos.isEmpty()) {
+            return Map.of();
+        }
+
         return priceService
                 .getCurrentPricesOf(requiredCryptos)
                 .entrySet()
