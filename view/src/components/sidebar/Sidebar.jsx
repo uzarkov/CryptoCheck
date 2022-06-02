@@ -2,7 +2,6 @@ import {NAME as AnalyticsName, URL as AnalyticsURL} from "../../pages/analytics-
 import {NAME as DashboardName, URL as DashboardURL} from "../../pages/dashboard-page/DashboardPage";
 import {NAME as PortfolioName, URL as PortfolioURL} from "../../pages/portfolio-page/PortfolioPage";
 import {NAME as PositionsName, URL as PositionsURL} from "../../pages/positions-page/PositionsPage";
-import {NAME as ProfileName, URL as ProfileURL} from "../../pages/profile-page/ProfilePage";
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
@@ -11,7 +10,7 @@ import {Divider, List} from "@mui/material";
 import {useHistory} from "react-router-dom";
 import Toolbar from "@mui/material/Toolbar";
 import IconButton from "@mui/material/IconButton";
-import {AccountBalanceWallet, AccountBox, Analytics, AutoAwesomeMotion, ChevronLeft} from "@mui/icons-material";
+import {AccountBalanceWallet, Analytics, AutoAwesomeMotion, ChevronLeft} from "@mui/icons-material";
 import {DesktopDrawer} from "./DesktopDrawer";
 import {MobileDrawer} from "./MobileDrawer";
 
@@ -20,8 +19,7 @@ export const Sidebar = ({isOpen, setIsOpen}) => {
   const history = useHistory()
 
   const mainLinks = [
-    [DashboardName, DashboardURL, <DashboardIcon/>],
-    [ProfileName, ProfileURL, <AccountBox/>],
+    [DashboardName, DashboardURL, <DashboardIcon/>]
   ]
 
   const links = [
