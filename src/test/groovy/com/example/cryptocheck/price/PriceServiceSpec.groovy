@@ -11,7 +11,7 @@ class PriceServiceSpec extends Specification {
 
     def "getCandlestickBarsFor() SHOULD return candlestick bars for the given symbol"() {
         given:
-        def supportedSymbols = ["BTCUSDT"] as Set<String>
+        def supportedSymbols = ["BTC"] as Set<String>
         def supportedIntervals = ["1h"] as Set<String>
         def priceService = new PriceService(binanceClientMock, supportedSymbols, supportedIntervals)
 
@@ -19,7 +19,7 @@ class PriceServiceSpec extends Specification {
         1 * binanceClientMock.getCandlestickBars("BTCUSDT", CandlestickInterval.HOURLY) >> [Mock(Candlestick)]
 
         when:
-        def result = priceService.getCandlestickBarsFor("BTCUSDT", "1h")
+        def result = priceService.getCandlestickBarsFor("BTC", "1h")
 
         then:
         result.size() == 1
@@ -27,12 +27,12 @@ class PriceServiceSpec extends Specification {
 
     def "getCandlestickBarsFor() WHEN given interval that cannot be mapped to enum SHOULD throw an exception"() {
         given:
-        def supportedSymbols = ["BTCUSDT"] as Set<String>
+        def supportedSymbols = ["BTC"] as Set<String>
         def supportedIntervals = ["???"] as Set<String>
         def priceService = new PriceService(binanceClientMock, supportedSymbols, supportedIntervals)
 
         when:
-        priceService.getCandlestickBarsFor("BTCUSDT", "???")
+        priceService.getCandlestickBarsFor("BTC", "???")
 
         then:
         thrown(NoSuchElementException)
@@ -40,7 +40,7 @@ class PriceServiceSpec extends Specification {
 
     def "getCandlestickBarsFor() WHEN given unsupported symbol SHOULD throw an exception"() {
         given:
-        def supportedSymbols = ["BTCUSDT"] as Set<String>
+        def supportedSymbols = ["BTC"] as Set<String>
         def supportedIntervals = ["1h"] as Set<String>
         def priceService = new PriceService(binanceClientMock, supportedSymbols, supportedIntervals)
 
@@ -54,12 +54,12 @@ class PriceServiceSpec extends Specification {
 
     def "getCandlestickBarsFor() WHEN given unsupported interval SHOULD throw an exception"() {
         given:
-        def supportedSymbols = ["BTCUSDT"] as Set<String>
+        def supportedSymbols = ["BTC"] as Set<String>
         def supportedIntervals = ["1h"] as Set<String>
         def priceService = new PriceService(binanceClientMock, supportedSymbols, supportedIntervals)
 
         when:
-        priceService.getCandlestickBarsFor("BTCUSDT", "???")
+        priceService.getCandlestickBarsFor("BTC", "???")
 
         then:
         def ex = thrown(PriceServiceException)
@@ -68,7 +68,7 @@ class PriceServiceSpec extends Specification {
 
     def "getCurrentPriceOf() WHEN given one symbol SHOULD return current price"() {
         given:
-        def supportedSymbols = ["BTCUSDT"] as Set<String>
+        def supportedSymbols = ["BTC"] as Set<String>
         def supportedIntervals = [] as Set<String>
         def priceService = new PriceService(binanceClientMock, supportedSymbols, supportedIntervals)
 
@@ -76,16 +76,16 @@ class PriceServiceSpec extends Specification {
         1 * binanceClientMock.getPrice("BTCUSDT") >> Mock(TickerPrice) { getPrice() >> "29238.44000000" }
 
         when:
-        def result = priceService.getCurrentPricesOf("BTCUSDT")
+        def result = priceService.getCurrentPricesOf("BTC")
 
         then:
         result.size() == 1
-        result["BTCUSDT"] == "29238.44000000"
+        result["BTC"] == "29238.44000000"
     }
 
     def "getCurrentPriceOf() WHEN given unsupported symbol SHOULD throw an exception"() {
         given:
-        def supportedSymbols = ["BTCUSDT"] as Set<String>
+        def supportedSymbols = ["BTC"] as Set<String>
         def supportedIntervals = [] as Set<String>
         def priceService = new PriceService(binanceClientMock, supportedSymbols, supportedIntervals)
 
@@ -99,7 +99,7 @@ class PriceServiceSpec extends Specification {
 
     def "getCurrentPriceOf() WHEN given multiple symbols SHOULD return their prices"() {
         given:
-        def supportedSymbols = ["BTCUSDT", "ETHUSDT"] as Set<String>
+        def supportedSymbols = ["BTC", "ETH"] as Set<String>
         def supportedIntervals = [] as Set<String>
         def priceService = new PriceService(binanceClientMock, supportedSymbols, supportedIntervals)
 
@@ -110,22 +110,22 @@ class PriceServiceSpec extends Specification {
         ]
 
         when:
-        def result = priceService.getCurrentPricesOf("BTCUSDT,ETHUSDT")
+        def result = priceService.getCurrentPricesOf("BTC,ETH")
 
         then:
         result.size() == 2
-        result["BTCUSDT"] == "29238.44000000"
-        result["ETHUSDT"] == "1748.93000000"
+        result["BTC"] == "29238.44000000"
+        result["ETH"] == "1748.93000000"
     }
 
     def "getCurrentPriceOf() WHEN given atleast one unsupported symbol SHOULD throw an exception"() {
         given:
-        def supportedSymbols = ["BTCUSDT"] as Set<String>
+        def supportedSymbols = ["BTC"] as Set<String>
         def supportedIntervals = [] as Set<String>
         def priceService = new PriceService(binanceClientMock, supportedSymbols, supportedIntervals)
 
         when:
-        priceService.getCurrentPricesOf("BTCUSDT,???")
+        priceService.getCurrentPricesOf("BTC,???")
 
         then:
         def ex = thrown(PriceServiceException)
@@ -134,7 +134,7 @@ class PriceServiceSpec extends Specification {
 
     def "getCurrentPriceOf() WHEN given empty symbol SHOULD throw an exception"() {
         given:
-        def supportedSymbols = ["BTCUSDT"] as Set<String>
+        def supportedSymbols = ["BTC"] as Set<String>
         def supportedIntervals = [] as Set<String>
         def priceService = new PriceService(binanceClientMock, supportedSymbols, supportedIntervals)
 

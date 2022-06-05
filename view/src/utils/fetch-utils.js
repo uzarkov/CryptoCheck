@@ -16,7 +16,9 @@ export const doGet = (endpoint) => {
     'Accept': 'application/json',
   })
 
-  return fetch(URL_PREFIX + endpoint, {
+  const url = endpoint.startsWith("http") ? endpoint : URL_PREFIX + endpoint;
+
+  return fetch(url, {
     method: 'GET',
     headers: headers,
   })

@@ -1,10 +1,7 @@
 package com.example.cryptocheck.dev;
 
-import com.example.cryptocheck.cryptocurrency.Cryptocurrency;
-import com.example.cryptocheck.cryptocurrency.CryptocurrencyRepository;
-//import com.example.cryptocheck.preference.Preference;
-//import com.example.cryptocheck.preference.PreferenceRepository;
 import com.example.cryptocheck.auth.oauth.OAuthProvider;
+import com.example.cryptocheck.cryptocurrency.CryptocurrencyRepository;
 import com.example.cryptocheck.user.AppUser;
 import com.example.cryptocheck.user.AppUserRepository;
 import lombok.RequiredArgsConstructor;
@@ -27,10 +24,6 @@ public class DataLoader implements ApplicationRunner {
         addSampleUser("Jan");
         addSampleUser("Andrzej");
         addSampleUser("Tomasz");
-
-        addCryptocurrency("Bitcoin", "BTC");
-        addCryptocurrency("Solana", "SOL");
-        addCryptocurrency("Ethereum", "ETH");
     }
 
     private AppUser addSampleUser(String name) {
@@ -40,10 +33,5 @@ public class DataLoader implements ApplicationRunner {
         user.setPassword(passwordEncoder.encode("password"));
         user.setAuthProvider(OAuthProvider.NONE);
         return userRepository.save(user);
-    }
-
-    private Cryptocurrency addCryptocurrency(String name, String symbol) {
-        var cur = new Cryptocurrency(name, symbol);
-        return cryptocurrencyRepository.save(cur);
     }
 }
