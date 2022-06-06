@@ -4,7 +4,9 @@ import com.binance.api.client.BinanceApiRestClient;
 import com.binance.api.client.domain.market.Candlestick;
 import com.binance.api.client.domain.market.CandlestickInterval;
 import com.binance.api.client.domain.market.TickerPrice;
+import com.example.cryptocheck.cryptocurrency.CryptocurrencyLoader;
 import lombok.Getter;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
@@ -18,11 +20,17 @@ public class PriceService {
     @Getter private final Set<String> supportedIntervals;
 
     public PriceService(BinanceApiRestClient binanceClient,
-                        @Value("${prices.supported-symbols}") Set<String> supportedSymbols,
+                        Set<String> supportedSymbols,
                         @Value("${prices.supported-intervals}") Set<String> supportedIntervalsIds) {
         this.binanceClient = binanceClient;
         this.supportedSymbols = supportedSymbols;
         this.supportedIntervals = supportedIntervalsIds;
+    }
+
+    @Autowired
+    public PriceService(BinanceApiRestClient binanceClient,
+                        @Value("${prices.supported-intervals}") Set<String> supportedIntervalsIds) {
+        this(binanceClient, CryptocurrencyLoader.cryptoMeta.keySet(), supportedIntervalsIds);
     }
 
     public List<Candlestick> getCandlestickBarsFor(String symbol, String intervalId) {
@@ -30,6 +38,13 @@ public class PriceService {
         validateIntervalId(intervalId);
 
         return binanceClient.getCandlestickBars(symbolWithUsdPair(symbol), candlestickIntervalForId(intervalId));
+    }
+
+    private CandlestickInterval candlestickIntervalForId(String intervalId) {
+        return Arrays.stream(CandlestickInterval.values())
+                .filter(interval -> interval.getIntervalId().equals(intervalId))
+                .findFirst()
+                .orElseThrow();
     }
 
     private String symbolWithUsdPair(String symbol) {
@@ -74,11 +89,49 @@ public class PriceService {
         return tickerPrice.getPrice();
     }
 
-    private CandlestickInterval candlestickIntervalForId(String intervalId) {
-        return Arrays.stream(CandlestickInterval.values())
-                .filter(interval -> interval.getIntervalId().equals(intervalId))
-                .findFirst()
-                .orElseThrow();
+    public double getPriceChangeFor(String symbol, String interval) {
+        return switch (interval) {
+            case "1h" -> get1hPriceChangeFor(symbol);
+            case "24h" -> get24hPriceChangeFor(symbol);
+            case "7d" -> get7dPriceChangeFor(symbol);
+            default -> -1;
+        };
+    }
+
+    private double get1hPriceChangeFor(String symbol) {
+        var candlestics = getCandlestickBarsFor(symbol, "1m");
+        var oldPriceCandlestick = candlestics.get(candlestics.size() - 1 - 60);
+        var newPriceCandlestick = candlestics.get(candlestics.size() - 1);
+
+        return calculatePriceChange(oldPriceCandlestick, newPriceCandlestick);
+    }
+
+    private double get24hPriceChangeFor(String symbol) {
+        var candlestics = getCandlestickBarsFor(symbol, "15m");
+        var oldPriceCandlestick = candlestics.get(candlestics.size() - 1 - 96);
+        var newPriceCandlestick = candlestics.get(candlestics.size() - 1);
+
+        return calculatePriceChange(oldPriceCandlestick, newPriceCandlestick);
+    }
+
+    private double get7dPriceChangeFor(String symbol) {
+        var candlestics = getCandlestickBarsFor(symbol, "4h");
+        var oldPriceCandlestick = candlestics.get(candlestics.size() - 1 - 42);
+        var newPriceCandlestick = candlestics.get(candlestics.size() - 1);
+
+        return calculatePriceChange(oldPriceCandlestick, newPriceCandlestick);
+    }
+
+    private double calculatePriceChange(Candlestick oldPriceCandlestic, Candlestick newPriceCandlestick) {
+        var oldPrice = Double.parseDouble(oldPriceCandlestic.getOpen());
+        var newPrice = Double.parseDouble(newPriceCandlestick.getClose());
+
+        var priceDifference = newPrice - oldPrice;
+        if (priceDifference == 0) {
+            return 0;
+        }
+
+        return priceDifference / oldPrice * 100;
     }
 
     private void validateSymbol(String symbol) {

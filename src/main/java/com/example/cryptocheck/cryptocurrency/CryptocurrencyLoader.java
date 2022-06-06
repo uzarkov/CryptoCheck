@@ -13,7 +13,7 @@ import java.util.Map;
 public class CryptocurrencyLoader implements ApplicationRunner {
     private record CryptoMetadata(String name, String coingeckoId) {}
 
-    private final Map<String, CryptoMetadata> cryptoMeta = Map.ofEntries(
+    public static final Map<String, CryptoMetadata> cryptoMeta = Map.ofEntries(
             Map.entry("BTC", new CryptoMetadata("Bitcoin", "bitcoin")),
             Map.entry("ETH", new CryptoMetadata("Ethereum", "ethereum")),
             Map.entry("BNB", new CryptoMetadata("BNB", "binancecoin")),

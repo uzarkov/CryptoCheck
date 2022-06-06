@@ -36,7 +36,10 @@ export const AssetTable = ({assetsMetadata, onRowClick}) => {
 
     Promise.all(promises)
       .then(results => results.filter(res => res !== undefined))
-      .then(results => setAssets(results))
+      .then(results => {
+        results.sort((a, b) => b.mcap - a.mcap)
+        setAssets(results)
+      })
       .catch(error => console.error(error))
   }, [assetsMetadata])
 
