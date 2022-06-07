@@ -9,4 +9,5 @@ import java.util.Optional;
 public interface CryptocurrencyRepository extends JpaRepository<Cryptocurrency, Long> {
 
     Optional<Cryptocurrency> findByName(String name);
+    boolean existsBySymbol(String symbol);
 }

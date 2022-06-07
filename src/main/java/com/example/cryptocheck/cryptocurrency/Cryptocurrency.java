@@ -24,6 +24,9 @@ public class Cryptocurrency {
     @Column(nullable = false, length = 6, unique = true)
     private String symbol;
 
+    @Column(nullable = false, length = 30, unique = true)
+    private String coinGeckoId;
+
     @OneToMany(mappedBy = "cryptocurrency")
     private List<Preference> preferences;
 
@@ -34,9 +37,11 @@ public class Cryptocurrency {
     private List<Position> positions;
 
     public Cryptocurrency(String name,
-                          String symbol) {
+                          String symbol,
+                          String coinGeckoId) {
         this.name = name;
         this.symbol = symbol;
+        this.coinGeckoId = coinGeckoId;
         this.preferences = new ArrayList<>();
         this.portfolioRecords = new ArrayList<>();
         this.positions = new ArrayList<>();

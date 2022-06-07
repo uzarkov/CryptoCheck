@@ -38,4 +38,10 @@ public class PriceController {
                 .map(CandlestickOutput::from)
                 .toList();
     }
+
+    @GetMapping(path = "/change/{symbol}/{interval}")
+    public Double getPriceChange(@PathVariable(name = "symbol") String symbol,
+                                 @PathVariable(name = "interval") String interval) {
+        return priceService.getPriceChangeFor(symbol, interval);
+    }
 }
