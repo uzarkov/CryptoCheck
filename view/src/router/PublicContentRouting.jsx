@@ -10,7 +10,7 @@ export const PublicContentRouting = ({user, setUser}) => {
         <LoginPage user={user} setUser={setUser} />
       </Route>
 
-      <Route path={"/oauth2/redirect"}>
+      <Route path={"/oauth2/response"}>
         <OAuth2RedirectHandler user={user} setUser={setUser} />
       </Route>
 

@@ -3,6 +3,7 @@ package com.example.cryptocheck.security;
 import com.example.cryptocheck.auth.JwtTokenFilter;
 import com.example.cryptocheck.auth.oauth.CustomOAuth2UserService;
 import com.example.cryptocheck.auth.oauth.OAuth2AuthenticationSuccessHandler;
+import com.example.cryptocheck.config.RedirectToIndexFilter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.core.env.Environment;
@@ -25,6 +26,7 @@ import java.util.List;
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
     private final PasswordEncoder passwordEncoder;
     private final JwtTokenFilter jwtTokenFilter;
+    private final RedirectToIndexFilter redirectToIndexFilter;
     private final UserDetailsService userDetailsService;
     private final Environment environment;
     private final CustomOAuth2UserService customOAuth2UserService;
@@ -53,7 +55,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                     response.sendError(HttpServletResponse.SC_UNAUTHORIZED, authException.getMessage());
                 })
                 .and()
-                .addFilterBefore(jwtTokenFilter, UsernamePasswordAuthenticationFilter.class);
+                .addFilterBefore(jwtTokenFilter, UsernamePasswordAuthenticationFilter.class)
+                .addFilterBefore(redirectToIndexFilter, jwtTokenFilter.getClass());
 
         if (activeProfiles.contains("developer")) {
             enableH2ConsoleAccess(http);
