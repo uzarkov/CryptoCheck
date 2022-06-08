@@ -142,9 +142,8 @@ public class PortfolioService {
     }
 
     private Map<String, String> getRequiredPrices(List<Asset> assets) {
-        var inPairWith = "USDT";
         var requiredCryptos = assets.stream()
-                .map(asset -> asset.cryptocurrency().getSymbol().concat(inPairWith))
+                .map(asset -> asset.cryptocurrency().getSymbol())
                 .collect(Collectors.joining(","));
 
         if (requiredCryptos.isEmpty()) {
@@ -155,7 +154,7 @@ public class PortfolioService {
                 .getCurrentPricesOf(requiredCryptos)
                 .entrySet()
                 .stream()
-                .map(e -> new AbstractMap.SimpleEntry<>(e.getKey().replace(inPairWith, ""), e.getValue()))
+                .map(e -> new AbstractMap.SimpleEntry<>(e.getKey(), e.getValue()))
                 .collect(Collectors.toMap(
                             Map.Entry::getKey,
                             Map.Entry::getValue
