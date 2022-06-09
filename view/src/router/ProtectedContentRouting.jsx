@@ -22,7 +22,7 @@ export const ProtectedContentRouting = ({user, logout, requestedLocation}) => {
 
   return (
     <>
-      <Topbar isOpen={isSidebarOpen} setIsOpen={setIsSidebarOpen} logout={logout}/>
+      <Topbar user={user} isOpen={isSidebarOpen} setIsOpen={setIsSidebarOpen} logout={logout}/>
       <Sidebar isOpen={isSidebarOpen} setIsOpen={setIsSidebarOpen}/>
       <Box
         component={"main"}
