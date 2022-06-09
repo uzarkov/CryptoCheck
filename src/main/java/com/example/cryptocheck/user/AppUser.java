@@ -40,6 +40,9 @@ public class AppUser {
     @Column(nullable = false)
     private String password;
 
+    @Column
+    private String avatarUrl;
+
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
     private OAuthProvider authProvider;
