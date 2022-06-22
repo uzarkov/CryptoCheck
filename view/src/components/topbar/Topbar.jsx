@@ -12,9 +12,8 @@ import {AccountCircle, Logout} from "@mui/icons-material";
 import {MobileAppBar} from "./MobileAppBar";
 import {DesktopAppBar} from "./DesktopAppBar";
 import { StyledEngineProvider } from '@mui/material/styles';
-import Avatar from "@mui/material/Avatar";
 
-export const Topbar = ({isOpen, setIsOpen, logout, user}) => {
+export const Topbar = ({isOpen, setIsOpen, logout}) => {
   const isMobile = window.matchMedia(`(max-width: 720px)`).matches;
   const history = useHistory()
   const location = useLocation()
@@ -66,11 +65,7 @@ export const Topbar = ({isOpen, setIsOpen, logout, user}) => {
              onClick={() => history.push(ProfileURL)}
              sx={{marginRight: "2px"}}
            >
-             {
-                user.currentUser.avatarUrl
-                  ? <Avatar sx={{ width: 24, height: 24 }} src={user.currentUser.avatarUrl} />
-                  : <AccountCircle/>
-             }
+             <AccountCircle/>
            </IconButton>
            <IconButton
              className={"menu-topBar-item"}

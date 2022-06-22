@@ -1,0 +1,27 @@
+.card {
+    height: 100%;
+    width: 180px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    background-color: white;
+    padding: 10px;
+    border-color: black;
+    border-width: 2px;
+}
+
+.card .crypto {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 10px;
+}
+
+.card .change {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: baseline;
+    margin-top: 10px;
+}

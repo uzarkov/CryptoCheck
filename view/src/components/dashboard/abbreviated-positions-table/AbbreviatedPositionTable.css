@@ -1,0 +1,19 @@
+.tableHeader {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.tableHeader .subtitle {
+    font-size: 1rem;
+    text-align: center;
+    color: grey;
+    padding-bottom: 10px;
+}
+
+.tableFooter {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding-top: 10px;
+}

@@ -1,0 +1,13 @@
+.shadowbox {
+    -moz-box-shadow: 0 0 3px #ccc;
+    -webkit-box-shadow: 0 0 3px #ccc;
+    box-shadow: 0 0 3px #ccc;
+    border-radius: 15px;
+}
+
+.linkButton {
+    border-width: 0;
+    background-color: transparent;
+    font-size: 18px;
+    color: #3f51b5;
+}

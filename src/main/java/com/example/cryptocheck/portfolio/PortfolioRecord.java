@@ -19,13 +19,13 @@ public class PortfolioRecord {
 
     @Id
     @SequenceGenerator(
-            name="portfolio_record_seq",
-            sequenceName = "portfolio_record_seq",
+            name="portfolio_seq",
+            sequenceName = "portfolio_seq",
             allocationSize = 1
     )
     @GeneratedValue(
             strategy = GenerationType.SEQUENCE,
-            generator = "portfolio_record_seq"
+            generator = "portfolio_seq"
     )
     private Long id;
 

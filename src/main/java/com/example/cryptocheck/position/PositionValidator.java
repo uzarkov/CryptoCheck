@@ -15,7 +15,7 @@ public final class PositionValidator {
     public static void validateNewPosition(PositionInput position) {
         if (position.quantity() <= 0
                 || position.entryPrice() <= 0
-                || position.entryDate().isAfter(LocalDate.now())) {
+                || position.entryDate().isBefore(LocalDate.now())) {
             throw InvalidPositionException.invalidPosition();
         }
     }

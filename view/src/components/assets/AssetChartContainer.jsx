@@ -17,7 +17,7 @@ export const AssetChartContainer = ({asset}) => {
     doGet(`/api/prices/${asset.symbol}/${interval}`)
       .then(response => response.json())
       .then(candlestics => setData(candlestics))
-  }, [interval, asset.symbol])
+  }, [interval])
 
   return (
     <div style={{display: "flex", flexDirection: "column"}}>

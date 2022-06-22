@@ -37,9 +37,8 @@ public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequ
 
         var authProvider = OAuthProvider.forRegistrationId(registrationId);
         var oauth2User = defaultOAuth2UserService.loadUser(userRequest);
-        var name = getAttribute(oauth2User, "name");
-        var email = getAttribute(oauth2User, "email");
-        var avatarUrl = getAttribute(oauth2User, "avatar_url");
+        var name = oauth2User.<String>getAttribute("name");
+        var email = oauth2User.<String>getAttribute("email");
 
         var user = appUserRepository.getUserByEmail(email);
         if (user.isPresent()) {
@@ -48,40 +47,25 @@ public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequ
                 var msg = AuthException.invalidProvider(existingUser.getAuthProvider()).getMessage();
                 throw new OAuth2AuthenticationException(msg);
             }
-            updateExistingUser(existingUser, name, avatarUrl);
+            updateExistingUser(existingUser, name);
         } else {
-            registerNewUser(name, email, authProvider, avatarUrl);
+            registerNewUser(name, email, authProvider);
         }
 
         return oauth2User;
     }
 
-    private String getAttribute(OAuth2User oAuth2User, String attibuteName) {
-        var attribute = oAuth2User.<String>getAttribute(attibuteName);
-        return attribute == null ? "" : attribute;
-    }
-
-    private void registerNewUser(String name, String email, OAuthProvider authProvider, String avatarUrl) {
+    private void registerNewUser(String name, String email, OAuthProvider authProvider) {
         var newUser = new AppUser();
         newUser.setName(name);
         newUser.setEmail(email);
         newUser.setPassword(passwordEncoder.encode(UUID.randomUUID().toString()));
         newUser.setAuthProvider(authProvider);
-
-        if (!avatarUrl.isBlank()) {
-            newUser.setAvatarUrl(avatarUrl);
-        }
-
         appUserRepository.save(newUser);
     }
 
-    private void updateExistingUser(AppUser existingUser, String name, String avatarUrl) {
+    private void updateExistingUser(AppUser existingUser, String name) {
         existingUser.setName(name);
-
-        if (!avatarUrl.isBlank()) {
-            existingUser.setAvatarUrl(avatarUrl);
-        }
-
         appUserRepository.save(existingUser);
     }
 }

@@ -64,9 +64,9 @@ class PortfolioServiceSpec extends Specification {
     }
     def priceService = Mock(PriceService) {
         getCurrentPricesOf(_ as String) >> Map.of(
-                "BTC", "60",
-                "ETH", "5",
-                "SOL", "2"
+                "BTCUSDT", "60",
+                "ETHUSDT", "5",
+                "SOLUSDT", "2"
         )
     }
     def portfolioService = new PortfolioService(portfolioRepository, userService, cryptocurrencyService, priceService)

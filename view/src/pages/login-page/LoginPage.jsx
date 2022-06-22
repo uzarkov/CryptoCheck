@@ -1,31 +1,24 @@
 import {doGet, doPost} from "../../utils/fetch-utils";
 import {LoginForm} from "../../components/login/LoginForm";
-import {useEffect, useState} from "react";
+import {useEffect} from "react";
 import Box from '@mui/material/Box';
 import {Container} from '@mui/material';
 
-export const LoginPage = ({setUser}) => {
-  const [loggingIn, setLoggingIn] = useState(true)
-
+export const LoginPage = ({user, setUser}) => {
   useEffect(() => {
     if (localStorage.getItem("ACCESS_TOKEN") !== null) {
       doGet("/api/users/me")
         .then(response => response.json())
         .then(userInfo => {
           setUser({
+            ...user,
             authenticated: true,
             currentUser: userInfo
           })
         })
         .catch(error => console.error(error))
-    } else {
-      setLoggingIn(false)
     }
-
-    return () => {
-      setLoggingIn(false)
-    }
-  }, [setUser])
+  }, [user, setUser])
 
   const signIn = (email, password) => {
     const body = {
@@ -41,15 +34,12 @@ export const LoginPage = ({setUser}) => {
       })
       .then(userInfo => {
         setUser({
+          ...user,
           authenticated: true,
           currentUser: userInfo
         });
       })
       .catch(error => console.error(error))
-  }
-
-  if (loggingIn) {
-    return null;
   }
 
   return (
