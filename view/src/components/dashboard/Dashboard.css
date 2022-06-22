@@ -1,0 +1,35 @@
+.container {
+    display: flex;
+    flex-direction: column;
+    padding: 30px 0;
+}
+
+.container .preferences {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    margin-bottom: 5%;
+}
+
+
+.userInfo {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+}
+
+@media screen and (max-width: 1385px) {
+    .userInfo {
+        flex-direction: column;
+    }
+
+    .userInfo > * {
+        margin: 0 20px 30px;
+    }
+}
+
+.loadingInfo {
+    text-align: center;
+    font-size: 35px;
+    font-weight: bold;
+}

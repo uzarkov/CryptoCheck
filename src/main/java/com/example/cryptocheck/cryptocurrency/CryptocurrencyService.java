@@ -25,6 +25,10 @@ public class CryptocurrencyService {
         return page.map(crypto -> PriceAwareCryptocurrencyOutput.from(crypto, prices.get(crypto.getSymbol())));
     }
 
+    public List<String> getSymbolsAssociatedWithUser(Long userId) {
+        return cryptocurrencyRepository.findUserCryptos(userId);
+    }
+
     private Map<String, String> getPricesFor(List<Cryptocurrency> cryptocurrencies) {
         var symbols = cryptocurrencies.stream()
                 .map(Cryptocurrency::getSymbol)

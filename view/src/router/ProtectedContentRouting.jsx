@@ -26,7 +26,8 @@ export const ProtectedContentRouting = ({user, logout}) => {
         }}
       >
         <Toolbar/>
-        <Container maxWidth={"lg"} sx={{mt: 4, mb: 4}}>
+
+        <Container maxWidth={"xlx"} sx={{mt: 4, mb: 4}}>
           <Switch>
             <Route path={"/"} exact>
               <Redirect to={DashboardURL}/>
@@ -57,6 +58,7 @@ export const ProtectedContentRouting = ({user, logout}) => {
             </Route>
           </Switch>
         </Container>
+
       </Box>
     </>
   );

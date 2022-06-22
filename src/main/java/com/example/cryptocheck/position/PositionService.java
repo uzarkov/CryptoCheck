@@ -12,12 +12,15 @@ import com.example.cryptocheck.user.AppUser;
 import com.example.cryptocheck.user.AppUserService;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.math.BigDecimal;
 import java.util.AbstractMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.stream.Collectors;
@@ -37,6 +40,29 @@ public class PositionService {
                                                            Pageable pageable) {
        var user = userService.getUserByEmail(email);
        return findAllPositionsByUser(user, Map.of(), pageable);
+   }
+
+   public List<PositionOutput> findLatestPositions(AppUser appUser,
+                                                   Map<String, String> prices,
+                                                   int positionsAmount) {
+       var pageable =
+               PageRequest.of(0, positionsAmount, Sort.by(Sort.Direction.DESC, "entryDate"));
+       var positions = positionRepository.findAllByAppUser(appUser, pageable);
+
+       var finalPrices = prices.entrySet()
+               .stream()
+               .map(e -> new AbstractMap.SimpleEntry<>(
+                       e.getKey().replace(DEFAULT_PAIR, ""),
+                       new BigDecimal(e.getValue())
+               ))
+               .collect(Collectors.toMap(
+                       Map.Entry::getKey,
+                       Map.Entry::getValue
+               ));
+
+       return positions.stream()
+               .map(pos -> buildPosition(pos, finalPrices.get(pos.getCryptocurrency().getSymbol())))
+               .toList();
    }
 
    public Page<PositionOutput> findAllPositionsByUser(AppUser appUser,
@@ -95,7 +121,7 @@ public class PositionService {
            targetPosition.setClosureTime(positionClosure.closureDate());
            var closedPosition = positionRepository.save(targetPosition);
            var currentPrice = priceService.getCurrentPriceOf(
-                   targetPosition.getCryptocurrency().getSymbol().concat(DEFAULT_PAIR));
+                   targetPosition.getCryptocurrency().getSymbol());
            return buildPosition(closedPosition, new BigDecimal(currentPrice));
        }
        throw UnauthorizedException.unauthorized();
@@ -109,8 +135,6 @@ public class PositionService {
 
    private boolean isUserPositionOwner(String userEmail,
                                        Position position) {
-       System.out.println("Position email: " + "x" + position.getAppUser().getEmail() +"x+ " + "\nsec email: " + "x" +userEmail + "x");
-       System.out.println(position.getAppUser().getEmail().equals(userEmail));
        return position.getAppUser().getEmail().equals(userEmail);
    }
 
