@@ -6,9 +6,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
@@ -21,5 +19,11 @@ public class CryptocurrencyController {
     public ResponseEntity<Page<CryptocurrencyOutput>> getAllCryptoCurrencies(Pageable pageable) {
         var cryptocurrencies = cryptocurrencyService.getAllCryptoCurrencies(pageable);
         return ResponseEntity.ok().body(cryptocurrencies);
+    }
+
+    @GetMapping(value = "/{cryptoId}")
+    public ResponseEntity<Cryptocurrency> getCryptoCurrencyById(@PathVariable("cryptoId") String name) {
+        var crypto = cryptocurrencyService.getCryptocurrencyById(name);
+        return ResponseEntity.ok().body(crypto);
     }
 }

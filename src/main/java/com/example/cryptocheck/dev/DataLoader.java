@@ -2,7 +2,10 @@ package com.example.cryptocheck.dev;
 
 import com.example.cryptocheck.auth.oauth.OAuthProvider;
 import com.example.cryptocheck.cryptocurrency.Cryptocurrency;
+
 import com.example.cryptocheck.cryptocurrency.CryptocurrencyRepository;
+import com.example.cryptocheck.position.Position;
+import com.example.cryptocheck.position.PositionRepository;
 import com.example.cryptocheck.portfolio.PortfolioRecord;
 import com.example.cryptocheck.portfolio.PortfolioRepository;
 import com.example.cryptocheck.position.Position;
@@ -40,6 +43,25 @@ public class DataLoader implements ApplicationRunner {
         var user1 = addSampleUser("Jan");
         addSampleUser("Andrzej");
         addSampleUser("Tomasz");
+//        var btc = addSampleCrypto("Bitcoin", "BTC", "D");
+        addSamplePosition(new BigDecimal("250"), new BigDecimal("1"), LocalDate.of(2022, 2, 10),
+                new BigDecimal("300"), LocalDate.of(2022, 5, 25), cryptocurrencyRepository.findByName("Ethereum").orElse(new Cryptocurrency()),
+                userRepository.getById(2L));
+        addSamplePosition(new BigDecimal("150"), new BigDecimal("2"), LocalDate.of(2022, 5, 11),
+                new BigDecimal("320"), LocalDate.of(2022, 5, 15), cryptocurrencyRepository.findByName("Ethereum").orElse(new Cryptocurrency()),
+                userRepository.getById(1L));
+        addSamplePosition(new BigDecimal("230"), new BigDecimal("3"), LocalDate.of(2022, 4, 10),
+                null, null, cryptocurrencyRepository.findByName("Ethereum").orElse(new Cryptocurrency()),
+                userRepository.getById(1L));
+        addSamplePosition(new BigDecimal("1200"), new BigDecimal("1"), LocalDate.of(2022, 3, 2),
+                null, null, cryptocurrencyRepository.findByName("Bitcoin").orElse(new Cryptocurrency()),
+                userRepository.getById(2L));
+        addSamplePosition(new BigDecimal("10000"), new BigDecimal("2"), LocalDate.of(2022, 2, 7),
+                null, null, cryptocurrencyRepository.findByName("Bitcoin").orElse(new Cryptocurrency()),
+                userRepository.getById(1L));
+        addSamplePosition(new BigDecimal("15000"), new BigDecimal("3"), LocalDate.of(2022, 1, 10),
+                new BigDecimal("11000"), LocalDate.of(2022, 2, 9), cryptocurrencyRepository.findByName("Bitcoin").orElse(new Cryptocurrency()),
+                userRepository.getById(1L));
 
         var btc = cryptocurrencyRepository.findByName("Bitcoin").get();
         var sol = cryptocurrencyRepository.findByName("Solana").get();
@@ -107,5 +129,26 @@ public class DataLoader implements ApplicationRunner {
                                                      String quantity) {
         var record = new PortfolioRecord(cr, new BigDecimal(quantity), user);
         return portfolioRepository.save(record);
+    }
+
+    private Position addSamplePosition(BigDecimal entryPrice, BigDecimal quantity, LocalDate entryDate,
+                                       BigDecimal closurePrice, LocalDate closureTime, Cryptocurrency cryptocurrency, AppUser appUser) {
+        var position = new Position();
+        position.setEntryPrice(entryPrice);
+        position.setQuantity(quantity);
+        position.setEntryDate(entryDate);
+        position.setClosurePrice(closurePrice);
+        position.setClosureTime(closureTime);
+        position.setCryptocurrency(cryptocurrency);
+        position.setAppUser(appUser);
+        return positionRepository.save(position);
+    }
+
+    private Cryptocurrency addSampleCrypto(String name, String symbol, String coinGekoID) {
+        var crypto = new Cryptocurrency();
+        crypto.setName(name);
+        crypto.setSymbol(symbol);
+        crypto.setCoinGeckoId(coinGekoID);
+        return cryptocurrencyRepository.save(crypto);
     }
 }

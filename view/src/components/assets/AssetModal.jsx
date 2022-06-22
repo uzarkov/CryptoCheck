@@ -27,7 +27,7 @@ export const AssetModal = ({asset, isOpen, onClose}) => {
     <Modal
       open={isOpen}
       onClose={() => onClose(asset)}
-    >
+     >
       <Box sx={style}>
         <AssetChartContainer asset={asset} />
       </Box>

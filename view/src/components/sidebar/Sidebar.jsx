@@ -24,7 +24,6 @@ export const Sidebar = ({isOpen, setIsOpen}) => {
 
   const links = [
     [AnalyticsName, AnalyticsURL, <Analytics/>],
-    [PortfolioName, PortfolioURL, <AccountBalanceWallet/>],
     [PositionsName, PositionsURL, <AutoAwesomeMotion/>],
   ];
 
