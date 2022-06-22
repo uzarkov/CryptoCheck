@@ -29,8 +29,6 @@ import java.util.stream.Collectors;
 @AllArgsConstructor
 public class PositionService {
 
-    private static final String DEFAULT_PAIR ="USDT";
-
    private final PositionRepository positionRepository;
    private final AppUserService userService;
    private final PriceService priceService;
@@ -52,7 +50,7 @@ public class PositionService {
        var finalPrices = prices.entrySet()
                .stream()
                .map(e -> new AbstractMap.SimpleEntry<>(
-                       e.getKey().replace(DEFAULT_PAIR, ""),
+                       e.getKey(),
                        new BigDecimal(e.getValue())
                ))
                .collect(Collectors.toMap(
@@ -85,7 +83,7 @@ public class PositionService {
        var cryptoName = positionInput.cryptocurrencyName();
        var cc = cryptocurrencyService.getCryptocurrencyById(cryptoName);
        var position = positionRepository.save(positionInput.toPosition(user, cc));
-       var currPrice = priceService.getCurrentPriceOf(cc.getSymbol().concat(DEFAULT_PAIR));
+       var currPrice = priceService.getCurrentPriceOf(cc.getSymbol());
 
        return buildPosition(position, new BigDecimal(currPrice));
    }
@@ -140,7 +138,7 @@ public class PositionService {
 
    private Map<String, BigDecimal> getRequiredPrices(Page<Position> positions) {
        var symbols = positions.stream()
-               .map(position -> position.getCryptocurrency().getSymbol().concat(DEFAULT_PAIR))
+               .map(position -> position.getCryptocurrency().getSymbol())
                .distinct()
                .collect(Collectors.joining(","));
 
@@ -153,7 +151,7 @@ public class PositionService {
                .entrySet()
                .stream()
                .map(e -> new AbstractMap.SimpleEntry<>(
-                            e.getKey().replace(DEFAULT_PAIR, ""),
+                            e.getKey(),
                             new BigDecimal(e.getValue())
                ))
                .collect(Collectors.toMap(

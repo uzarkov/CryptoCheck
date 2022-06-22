@@ -1,9 +1,10 @@
 import './App.css';
-import {useState} from "react";
+import {useEffect, useState} from "react";
 import {ProtectedContentRouting} from "../../router/ProtectedContentRouting";
 import {PublicContentRouting} from "../../router/PublicContentRouting";
 import {Box, createTheme, CssBaseline, ThemeProvider} from "@mui/material";
 import {indigo} from "@mui/material/colors";
+import {useLocation} from "react-router-dom";
 
 const theme = createTheme({
   palette: {
@@ -15,6 +16,12 @@ const theme = createTheme({
 
 function App() {
   const [user, setUser] = useState({currentUser: null, authenticated: false})
+  const [requestedLocation, setRequestedLocation] = useState()
+  const location = useLocation()
+
+  useEffect(() => {
+    setRequestedLocation(location)
+  }, [])
 
   const logout = () => {
     setUser({currentUser: null, authenticated: false})
@@ -27,8 +34,8 @@ function App() {
         <CssBaseline/>
         {
           user.authenticated
-            ? <ProtectedContentRouting user={user} logout={logout}/>
-            : <PublicContentRouting user={user} setUser={setUser}/>
+            ? <ProtectedContentRouting user={user} logout={logout} requestedLocation={requestedLocation}/>
+            : <PublicContentRouting setUser={setUser}/>
         }
       </Box>
     </ThemeProvider>

@@ -1,7 +1,7 @@
 import {Redirect, useLocation} from "react-router-dom";
 import {doGet} from "../utils/fetch-utils";
 
-export const OAuth2RedirectHandler = ({user, setUser}) => {
+export const OAuth2RedirectHandler = ({setUser}) => {
   const location = useLocation()
 
   const getUrlParameter = (parameterName) => {
@@ -17,7 +17,6 @@ export const OAuth2RedirectHandler = ({user, setUser}) => {
       .then(response => response.json())
       .then(userInfo => {
         setUser({
-          ...user,
           authenticated: true,
           currentUser: userInfo
         })
@@ -26,7 +25,7 @@ export const OAuth2RedirectHandler = ({user, setUser}) => {
   }
 
   const token = getUrlParameter("access_token")
-  if (token && !user.authenticated) {
+  if (token) {
     localStorage.setItem("ACCESS_TOKEN", token)
     fetchUserMetadata()
   }
